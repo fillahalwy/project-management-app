@@ -15,21 +15,21 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name'     => 'Atmin',
-            'email'    => 'atmin@tester.com',
+            'email'    => 'atmin@mail.com',
             'password' => Hash::make('password'),
             'role'     => 'admin',
         ]);
 
         User::create([
             'name'     => 'Member1',
-            'email'    => 'member1@tester.com',
+            'email'    => 'member1@mail.com',
             'password' => Hash::make('password'),
             'role'     => 'member',
         ]);
 
         User::create([
             'name'     => 'Member2',
-            'email'    => 'member2@tester.com',
+            'email'    => 'member2@mail.com',
             'password' => Hash::make('password'),
             'role'     => 'member',
         ]);

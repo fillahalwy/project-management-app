@@ -11,13 +11,13 @@ class ProjectSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin   = User::where('email', 'atmin@tester.com')->first();
-        $member1 = User::where('email', 'member1@tester.com')->first();
-        $member2 = User::where('email', 'member2@tester.com')->first();
+        $admin   = User::where('email', 'atmin@mail.com')->first();
+        $member1 = User::where('email', 'member1@mail.com')->first();
+        $member2 = User::where('email', 'member2@mail.com')->first();
 
         $project1 = Project::create([
-            'name'        => 'Redesign Website',
-            'description' => 'Redesign company website with modern UI.',
+            'name'        => 'UI/UX Website',
+            'description' => 'UI/UX website perusahaan',
             'status'      => 'active',
             'owner_id'    => $admin->id,
         ]);
@@ -29,7 +29,7 @@ class ProjectSeeder extends Seeder
         Task::create([
             'project_id'  => $project1->id,
             'assigned_to' => $member1->id,
-            'title'       => 'Create wireframes',
+            'title'       => 'Wirefreame homepage',
             'status'      => 'done',
             'priority'    => 'high',
         ]);
@@ -43,8 +43,8 @@ class ProjectSeeder extends Seeder
         ]);
 
         $project2 = Project::create([
-            'name'        => 'Mobile App MVP',
-            'description' => 'Build MVP for internal mobile application.',
+            'name'        => 'APJ',
+            'description' => 'Aplikasi Pemberantas Judol',
             'status'      => 'active',
             'owner_id'    => $member1->id,
         ]);
@@ -54,7 +54,7 @@ class ProjectSeeder extends Seeder
         Task::create([
             'project_id'  => $project2->id,
             'assigned_to' => $member2->id,
-            'title'       => 'Setup project repo',
+            'title'       => 'Setup repo',
             'status'      => 'todo',
             'priority'    => 'medium',
         ]);

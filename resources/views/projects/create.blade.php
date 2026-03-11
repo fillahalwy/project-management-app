@@ -1,4 +1,5 @@
 <x-app-layout>
+    <div class="max-w-2xl mx-auto">
     <x-page-header title="Create Project">
         <x-slot name="actions">
             <a href="{{ route('projects.index') }}"
@@ -8,7 +9,7 @@
         </x-slot>
     </x-page-header>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <form method="POST" action="{{ route('projects.store') }}">
             @csrf
 
@@ -64,5 +65,6 @@
                 </a>
             </div>
         </form>
+    </div>
     </div>
 </x-app-layout>

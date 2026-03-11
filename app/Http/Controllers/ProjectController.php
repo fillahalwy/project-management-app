@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
@@ -12,11 +13,21 @@ class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with('owner', 'members', 'tasks')
-        ->latest()
-        ->paginate(10);
+        $query = Project::with(['owner', 'members', 'tasks'])->latest();
+
+        //search by name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $projects = $query->paginate(10)->withQueryString();
 
         return view('projects.index', compact('projects'));
     }
@@ -47,15 +58,21 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project  )->with('success', 'Project created successfully.');
     }
 
-    public function show(Project $project)
+    public function show(Request $request,Project $project)
     {
-        $project->load([
-            'owner',
-            'members',
-            'tasks.assignee',
-        ]);
+        $project->load(['owner','members']);
 
-        $tasks = $project->tasks()->with('assignee')->latest()->paginate(10);
+        $taskQuery = $project->tasks()->with('assignee')->latest();
+
+        if($request->filled('task_status')) {
+            $taskQuery->where('status', $request->task_status);
+        }
+
+        if($request->filled('task_priority')) {
+            $taskQuery->where('priority', $request->task_priority);
+        }
+
+        $tasks = $taskQuery->paginate(10)->withQueryString();
 
         return view('projects.show', compact('project', 'tasks'));
     }

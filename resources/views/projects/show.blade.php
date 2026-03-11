@@ -48,6 +48,41 @@
         </div>
     </div>
 
+    {{-- Task Filter --}}
+    <form method="GET" action="{{ route('projects.show', $project) }}"
+        class="p-4 border-b border-gray-100 flex gap-3 items-end bg-gray-50">
+        <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+            <select name="task_status"
+                    class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">All</option>
+                <option value="todo"        {{ request('task_status') === 'todo'        ? 'selected' : '' }}>To Do</option>
+                <option value="in_progress" {{ request('task_status') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                <option value="done"        {{ request('task_status') === 'done'        ? 'selected' : '' }}>Done</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Priority</label>
+            <select name="task_priority"
+                    class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">All</option>
+                <option value="low"    {{ request('task_priority') === 'low'    ? 'selected' : '' }}>Low</option>
+                <option value="medium" {{ request('task_priority') === 'medium' ? 'selected' : '' }}>Medium</option>
+                <option value="high"   {{ request('task_priority') === 'high'   ? 'selected' : '' }}>High</option>
+            </select>
+        </div>
+        <button type="submit"
+                class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700">
+            Filter
+        </button>
+        @if(request('task_status') || request('task_priority'))
+            <a href="{{ route('projects.show', $project) }}"
+            class="px-3 py-1.5 rounded-lg text-sm text-gray-600 border border-gray-300 hover:bg-gray-50">
+                Reset
+            </a>
+        @endif
+    </form>
+
     {{-- Tasks --}}
     <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div class="p-5 border-b border-gray-100 flex items-center justify-between">
