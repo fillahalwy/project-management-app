@@ -6,12 +6,12 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use AuthorizesRequests;
+
     public function index()
     {
         $projects = Project::with('owner', 'members', 'tasks')
@@ -21,20 +21,18 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        $this->authorize('create', Project::class);
+
         $users = User::where('id', '!=', auth()->id())->get();
         return view ('projects.create', compact('users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreProjectRequest $request)
     {
+        $this->authorize('create', Project::class);
+
         $project = Project::create([
             'name'        => $request->name,
             'description' => $request->description,
@@ -49,9 +47,6 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project  )->with('success', 'Project created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Project $project)
     {
         $project->load([
@@ -65,21 +60,19 @@ class ProjectController extends Controller
         return view('projects.show', compact('project', 'tasks'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Project $project)
     {
+        $this->authorize('update', $project);
+
         $users = User::where('id', '!=', auth()->id())->get();
         $currentMemberIds = $project->members()->pluck('id')->toArray();
         return view('projects.edit', compact('project', 'users', 'currentMemberIds'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorize('update', $project);
+
         $project->update([
             'name'        => $request->name,
             'description' => $request->description,
@@ -92,11 +85,10 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project)->with('success', 'Project updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
 
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');

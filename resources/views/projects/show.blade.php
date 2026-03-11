@@ -1,12 +1,16 @@
 <x-app-layout>
     <x-page-header :title="$project->name">
         <x-slot name="actions">
+            @can('update', $project)
             <a href="{{ route('projects.edit', $project) }}"
-               class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">
+            class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">
                 Edit Project
             </a>
+            @endcan
+
+            @can('delete', $project)
             <form method="POST" action="{{ route('projects.destroy', $project) }}"
-                  onsubmit="return confirm('Delete this project? This cannot be undone.')">
+                onsubmit="return confirm('Delete this project? This cannot be undone.')">
                 @csrf
                 @method('DELETE')
                 <button type="submit"
@@ -14,6 +18,7 @@
                     Delete
                 </button>
             </form>
+            @endcan
         </x-slot>
     </x-page-header>
 
@@ -47,10 +52,11 @@
     <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div class="p-5 border-b border-gray-100 flex items-center justify-between">
             <h2 class="text-lg font-semibold text-gray-800">Tasks</h2>
-            <a href="{{ route('projects.tasks.create', $project) }}"
-               class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700">
-                + Add Task
-            </a>
+            @if($project->isOwner(auth()->user()) || $project->isMember(auth()->user()))
+                <a href="{{ route('projects.tasks.create', $project) }}"class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                    + Add Task
+                </a>
+            @endif
         </div>
 
         @forelse($tasks as $task)
@@ -68,16 +74,23 @@
                             </span>
                         </div>
                     </div>
+                    {{-- Task actions --}}
                     <div class="flex items-center gap-2">
                         <x-badge :type="$task->status" :text="ucfirst(str_replace('_', ' ', $task->status))" />
+                        
+                        @can('update', $task)
                         <a href="{{ route('tasks.edit', $task) }}"
-                           class="text-xs text-indigo-600 hover:underline">Edit</a>
+                        class="text-xs text-indigo-600 hover:underline">Edit</a>
+                        @endcan
+                        
+                        @can('delete', $task)
                         <form method="POST" action="{{ route('tasks.destroy', $task) }}"
-                              onsubmit="return confirm('Delete this task?')">
+                            onsubmit="return confirm('Delete this task?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-xs text-red-500 hover:underline">Delete</button>
                         </form>
+                        @endcan
                     </div>
                 </div>
             </div>

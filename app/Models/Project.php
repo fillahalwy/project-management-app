@@ -39,6 +39,6 @@ class Project extends Model
 
     public function isOwner(User $user): bool
     {
-        return $this->owner_id === $user->id;
+        return (int) $this->owner_id === (int) $user->id;
     }
 }
