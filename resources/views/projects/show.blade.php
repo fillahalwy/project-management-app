@@ -102,11 +102,23 @@
                         @if($task->description)
                             <p class="text-xs text-gray-400 mt-0.5">{{ Str::limit($task->description, 80) }}</p>
                         @endif
-                        <div class="flex items-center gap-2 mt-1.5">
+                        <div class="flex items-center gap-2 mt-1.5 flex-wrap">
                             <x-badge :type="$task->priority" :text="ucfirst($task->priority)" />
                             <span class="text-xs text-gray-400">
                                 {{ $task->assignee ? 'Assigned to: ' . $task->assignee->name : 'Unassigned' }}
                             </span>
+                            @if($task->deadline)
+                                @php
+                                    $isOverdue = $task->deadline->isPast() && $task->status !== 'done';
+                                    $isToday   = $task->deadline->isToday();
+                                @endphp
+                                <span class="text-xs flex items-center gap-1 {{ $isOverdue ? 'text-red-500 font-medium' : ($isToday ? 'text-amber-500 font-medium' : 'text-gray-400') }}">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+                                    </svg>
+                                    {{ $isOverdue ? 'Overdue · ' : ($isToday ? 'Due today · ' : '') }}{{ $task->deadline->format('d M Y') }}
+                                </span>
+                            @endif
                         </div>
                     </div>
                     {{-- Task actions --}}

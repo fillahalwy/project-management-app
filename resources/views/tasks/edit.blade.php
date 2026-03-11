@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Assign To</label>
                 <select name="assigned_to"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -62,6 +62,17 @@
                     @endforeach
                 </select>
                 <x-input-error field="assigned_to" />
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Deadline
+                    <span class="text-gray-400 font-normal">(opsional)</span>
+                </label>
+                <input type="date" name="deadline"
+                       value="{{ old('deadline', $task->deadline?->format('Y-m-d')) }}"
+                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('deadline') border-red-400 @enderror">
+                <x-input-error field="deadline" />
             </div>
 
             <div class="flex gap-3">

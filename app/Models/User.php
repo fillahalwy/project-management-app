@@ -9,14 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -24,21 +18,11 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,17 +31,21 @@ class User extends Authenticatable
         ];
     }
 
-    // Relasi
+    // --- Relations ---
+
+    // project yang dia buat sendiri
     public function ownedProjects()
     {
         return $this->hasMany(Project::class, 'owner_id');
     }
 
+    // project yang dia ikuti sebagai member
     public function memberProjects()
     {
         return $this->belongsToMany(Project::class, 'project_members');
     }
 
+    // task yang di-assign ke dia
     public function tasks()
     {
         return $this->hasMany(Task::class, 'assigned_to');

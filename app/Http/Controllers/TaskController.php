@@ -13,14 +13,16 @@ class TaskController extends Controller
     use AuthorizesRequests;
 
     public function create(Project $project)
-     {
+    {
+        // yang boleh buat task: owner atau member project
         if (!$project->isOwner(auth()->user()) && !$project->isMember(auth()->user())) {
             abort(403);
         }
 
+        // owner juga masuk daftar supaya bisa di-assign
         $members = $project->members()->get()->push($project->owner)->unique('id');
         return view('tasks.create', compact('project', 'members'));
-     }
+    }
 
     public function store(StoreTaskRequest $request, Project $project)
     {
@@ -37,6 +39,7 @@ class TaskController extends Controller
         $this->authorize('update', $task);
 
         $project = $task->project;
+        // owner juga masuk daftar supaya bisa di-assign
         $members = $project->members()->get()->push($project->owner)->unique('id');
         return view('tasks.edit', compact('project', 'task', 'members'));
     }

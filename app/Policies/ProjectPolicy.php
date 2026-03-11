@@ -7,6 +7,7 @@ use App\Models\User;
 
 class ProjectPolicy
 {
+    // admin skip semua cek di bawah
     public function before(User $user, string $ability): bool|null
     {
         if ($user->is_admin) {
@@ -15,6 +16,7 @@ class ProjectPolicy
         return null;
     }
 
+    // semua user yang sudah login boleh lihat daftar & detail project
     public function viewAny(User $user): bool
     {
         return true;
@@ -25,11 +27,13 @@ class ProjectPolicy
         return true;
     }
 
+    // semua user yang sudah login boleh create project
     public function create(User $user): bool
     {
         return true;
     }
 
+    // cuma owner yang boleh edit/hapus
     public function update(User $user, Project $project): bool
     {
         return $project->isOwner($user);

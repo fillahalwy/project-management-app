@@ -19,6 +19,7 @@ class UpdateTaskRequest extends FormRequest
             'status'      => ['required', 'in:todo,in_progress,done'],
             'priority'    => ['required', 'in:low,medium,high'],
             'assigned_to' => ['nullable', 'exists:users,id'],
+            'deadline'    => ['nullable', 'date'], // tanpa after_or_equal, agar task lama yang udah overdue tidak error
         ];
     }
 }

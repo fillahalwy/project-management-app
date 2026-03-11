@@ -17,12 +17,11 @@ class ProjectController extends Controller
     {
         $query = Project::with(['owner', 'members', 'tasks'])->latest();
 
-        //search by name
+        // bisa filter by nama & status, keduanya opsional
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -44,13 +43,15 @@ class ProjectController extends Controller
     {
         $this->authorize('create', Project::class);
 
+        // owner_id otomatis dari siapa yang lagi login
         $project = Project::create([
             'name'        => $request->name,
             'description' => $request->description,
             'status'      => $request->status,
             'owner_id'    => auth()->id(),
         ]);
-        
+
+        // kalau ada member yang dipilih, langsung attach
         if ($request->filled('members')) {
             $project->members()->attach($request->members);
         }
@@ -62,13 +63,14 @@ class ProjectController extends Controller
     {
         $project->load(['owner','members']);
 
+        // filter task by status & priority, keduanya opsional
         $taskQuery = $project->tasks()->with('assignee')->latest();
 
-        if($request->filled('task_status')) {
+        if ($request->filled('task_status')) {
             $taskQuery->where('status', $request->task_status);
         }
 
-        if($request->filled('task_priority')) {
+        if ($request->filled('task_priority')) {
             $taskQuery->where('priority', $request->task_priority);
         }
 
@@ -96,7 +98,7 @@ class ProjectController extends Controller
             'status'      => $request->status,
         ]);
 
-        // Sync members
+        // sync() ganti semua member lama sekaligus
         $project->members()->sync($request->members ?? []);
 
         return redirect()->route('projects.show', $project)->with('success', 'Project updated successfully.');

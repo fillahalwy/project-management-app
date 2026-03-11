@@ -14,16 +14,23 @@ class Task extends Model
         'assigned_to',
         'title',
         'description',
-        'status',
-        'priority',
+        'status',   // todo | in_progress | done
+        'priority', // low | medium | high
+        'deadline', // boleh kosong kalau tidak ada deadline
     ];
 
-    // Relasi
+    protected $casts = [
+        'deadline' => 'date', // jadi Carbon instance saat diakses
+    ];
+
+    // --- Relations ---
+
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
+    // user yang mengerjakan task ini
     public function assignee()
     {
         return $this->belongsTo(User::class, 'assigned_to');

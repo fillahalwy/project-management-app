@@ -21,7 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Projects
     Route::resource('projects', ProjectController::class);
 
-    // Tasks (nested di bawah project)
+    // shallow() biar route edit/update/destroy pakai /tasks/{task}
+    // jadi nggak perlu bawa-bawa project_id di URL
     Route::resource('projects.tasks', TaskController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->shallow();
