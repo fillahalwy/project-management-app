@@ -30,27 +30,19 @@
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status *</label>
-                    <select name="status"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        @foreach(['todo' => 'To Do', 'in_progress' => 'In Progress', 'done' => 'Done'] as $value => $label)
-                            <option value="{{ $value }}"
-                                {{ old('status', $task->status) === $value ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
+                    <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="todo"        {{ old('status', $task->status) === 'todo'        ? 'selected' : '' }}>To Do</option>
+                        <option value="in_progress" {{ old('status', $task->status) === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="done"        {{ old('status', $task->status) === 'done'        ? 'selected' : '' }}>Done</option>
                     </select>
                     <x-input-error field="status" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Priority *</label>
-                    <select name="priority"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        @foreach(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High'] as $value => $label)
-                            <option value="{{ $value }}"
-                                {{ old('priority', $task->priority) === $value ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
+                    <select name="priority" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="low"    {{ old('priority', $task->priority) === 'low'    ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ old('priority', $task->priority) === 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high"   {{ old('priority', $task->priority) === 'high'   ? 'selected' : '' }}>High</option>
                     </select>
                     <x-input-error field="priority" />
                 </div>
@@ -72,8 +64,7 @@
             </div>
 
             <div class="flex gap-3">
-                <button type="submit"
-                        class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">
                     Update Task
                 </button>
                 <a href="{{ route('projects.show', $project) }}"

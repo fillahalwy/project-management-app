@@ -11,7 +11,15 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-2xl">
         <form method="POST" action="{{ route('projects.tasks.store', $project) }}">
             @csrf
-
+            @if($errors->any())
+                <div class="bg-red-100 p-4 rounded mb-4">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li class="text-red-700 text-sm">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Task Title *</label>
                 <input type="text" name="title" value="{{ old('title') }}"
@@ -41,13 +49,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Priority *</label>
-                    <select name="priority"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        @foreach(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High'] as $value => $label)
-                            <option value="{{ $value }}" {{ old('priority', 'medium') === $value ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
+                    <select name="priority" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="low"    {{ old('priority', 'medium') === 'low'    ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ old('priority', 'medium') === 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high"   {{ old('priority', 'medium') === 'high'   ? 'selected' : '' }}>High</option>
                     </select>
                     <x-input-error field="priority" />
                 </div>
