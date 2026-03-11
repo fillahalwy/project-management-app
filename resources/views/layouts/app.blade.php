@@ -28,8 +28,7 @@
                        class="text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }}">
                         Dashboard
                     </a>
-                    {{-- <a href="{{ route('projects.index') }}" --}}
-                    <a href="#"
+                    <a href="{{ route('projects.index') }}"
                        class="text-sm font-medium {{ request()->routeIs('projects.*') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }}">
                         Projects
                     </a>

@@ -18,6 +18,7 @@ class Task extends Model
         'priority',
     ];
 
+    // Relasi
     public function project()
     {
         return $this->belongsTo(Project::class);

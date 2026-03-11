@@ -47,6 +47,7 @@ class User extends Authenticatable
         ];
     }
 
+    // Relasi
     public function ownedProjects()
     {
         return $this->hasMany(Project::class, 'owner_id');
